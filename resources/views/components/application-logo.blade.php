@@ -1,0 +1,1 @@
+<img src="{{ asset('images/logo.png') }}" alt="Ministerio de Adoración" style="max-height: 150px;">
