@@ -24,7 +24,8 @@ RUN a2enmod rewrite
 EXPOSE 80
 
 # Comandos de build: instalar dependencias y generar clave
-RUN cd /var/www/html && composer install --no-dev --optimize-autoloader \
+RUN cd /var/www/html && cp .env.example .env \
+    && composer install --no-dev --optimize-autoloader \
     && php artisan key:generate
 
 # Start Apache
