@@ -23,7 +23,7 @@ class Culto extends Model
         return $this->belongsToMany(Cancion::class)
             ->withPivot('estructura', 'tonalidad', 'orden') // <-- asegurate que tonalidad esté acá
             ->withTimestamps()
-            ->orderBy('pivot_orden');
+            ->orderBy('orden');
     }
 
     public function rolCultos()

@@ -22,25 +22,17 @@ class CultoCancionController extends Controller
 
     public function store(Request $request, Culto $culto)
     {
-        try {
-            $validated = $request->validate([
-                'cancion_id' => 'required|exists:cancions,id',
-            ]);
+        $validated = $request->validate([
+            'cancion_id' => 'required|exists:cancions,id',  // Usar el nombre exacto de la tabla
+        ]);
 
-            if ($culto->canciones()->where('cancion_id', $validated['cancion_id'])->exists()) {
-                return redirect()->back()->with('error', 'La canción ya fue asignada a este culto.');
-            }
-
-            $culto->canciones()->attach($validated['cancion_id']);
-
-            return redirect()->route('cultos.show', $culto)->with('success', 'Canción asignada correctamente.');
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error al asignar canción',
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ], 500);
+        if ($culto->canciones()->where('cancion_id', $validated['cancion_id'])->exists()) {
+            return redirect()->back()->with('error', 'La canción ya fue asignada a este culto.');
         }
+
+        $culto->canciones()->attach($validated['cancion_id']);
+
+        return redirect()->route('cultos.show', $culto)->with('success', 'Canción asignada correctamente.');
     }
 
     public function destroy(Culto $culto, Cancion $cancion)
