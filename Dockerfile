@@ -39,7 +39,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
 
 # Preparar el entorno Laravel
 RUN composer install --no-dev --optimize-autoloader \
-    && php artisan key:generate
+
 
 
 # Exponer el puerto 80
