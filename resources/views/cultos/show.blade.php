@@ -233,8 +233,8 @@
         </style>
     @endpush
 
-    @push('scripts')
-    <script>
+            @push('scripts')
+        <script>
         document.addEventListener('DOMContentLoaded', function () {
             const canciones = @json($cancionesJson);
             const selectCancion = document.getElementById('cancion_id');
@@ -242,21 +242,22 @@
             const autorSpan = document.getElementById('autor-cancion');
             const previewDiv = document.getElementById('preview-letra');
 
-            selectCancion.addEventListener('change', function () {
-                const id = parseInt(this.value);
-                const cancion = canciones.find(c => c.id === id);
-                if (cancion) {
-                    autorSpan.textContent = cancion.autor;
-                    previewDiv.textContent = cancion.letra;
-                    infoDiv.style.display = 'block';
-                } else {
-                    infoDiv.style.display = 'none';
-                    autorSpan.textContent = '';
-                    previewDiv.textContent = '';
-                }
-            });
+            if (selectCancion) {
+                selectCancion.addEventListener('change', function () {
+                    const id = parseInt(this.value);
+                    const cancion = canciones.find(c => c.id === id);
+                    if (cancion) {
+                        autorSpan.textContent = cancion.autor;
+                        previewDiv.textContent = cancion.letra;
+                        infoDiv.style.display = 'block';
+                    } else {
+                        infoDiv.style.display = 'none';
+                        autorSpan.textContent = '';
+                        previewDiv.textContent = '';
+                    }
+                });
+            }
 
-            // Modal estructura: mostrar valores o "Todavía no definida"
             var estructuraModal = document.getElementById('estructuraModal');
             var modalTitulo = document.getElementById('modal-titulo');
             var modalEstructuraSpan = document.getElementById('modal-estructura');
@@ -264,43 +265,49 @@
             var estructuraInput = document.getElementById('modal-estructura-input');
             var guardadoMsg = document.getElementById('estructura-guardado-msg');
 
-            estructuraModal.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var titulo = button.getAttribute('data-titulo');
-                var estructura = button.getAttribute('data-estructura');
-                var tonalidad = button.getAttribute('data-tonalidad');
+            if (estructuraModal) {
+                estructuraModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var titulo = button.getAttribute('data-titulo');
+                    var estructura = button.getAttribute('data-estructura');
+                    var tonalidad = button.getAttribute('data-tonalidad');
 
-                modalTitulo.textContent = titulo;
-                modalTonalidadSpan.textContent = tonalidad ? tonalidad : 'Todavía no definida';
+                    if (modalTitulo) modalTitulo.textContent = titulo;
+                    if (modalTonalidadSpan) modalTonalidadSpan.textContent = tonalidad ? tonalidad : 'Todavía no definida';
 
-                @if($puedeOrdenar)
-                    // Buscar letra desde JSON
-                    var cancionInfo = canciones.find(c => c.titulo === titulo);
-                    var letra = cancionInfo?.letra ?? '';
-
-                    estructuraInput.value = estructura || letra;
-                    guardadoMsg.style.display = 'none';
-                    modalEstructuraSpan.style.display = 'none';
-                    estructuraInput.style.display = 'block';
-                @else
-                    modalEstructuraSpan.textContent = estructura ? estructura : 'Todavía no definida';
-                    modalEstructuraSpan.style.display = 'inline';
-                    if (estructuraInput) estructuraInput.style.display = 'none';
-                    if (guardadoMsg) guardadoMsg.style.display = 'none';
-                @endif
-            });
+                    @if($puedeOrdenar)
+                        if (estructuraInput) {
+                            var cancionInfo = canciones.find(c => c.titulo === titulo);
+                            var letra = cancionInfo?.letra ?? '';
+                            estructuraInput.value = estructura || letra;
+                            if (guardadoMsg) guardadoMsg.style.display = 'none';
+                            if (modalEstructuraSpan) modalEstructuraSpan.style.display = 'none';
+                            estructuraInput.style.display = 'block';
+                        }
+                    @else
+                        if (modalEstructuraSpan) {
+                            modalEstructuraSpan.textContent = estructura ? estructura : 'Todavía no definida';
+                            modalEstructuraSpan.style.display = 'inline';
+                        }
+                        if (estructuraInput) estructuraInput.style.display = 'none';
+                        if (guardadoMsg) guardadoMsg.style.display = 'none';
+                    @endif
+                });
+            }
 
             @if($puedeOrdenar)
-            // Guardar estructura al perder foco
-            estructuraInput.addEventListener('blur', guardarEstructura);
-            
+            if (estructuraInput) {
+                estructuraInput.addEventListener('blur', guardarEstructura);
+            }
+
             function guardarEstructura() {
+                if (!estructuraInput || !modalTitulo) return;
+
                 var nuevaEstructura = estructuraInput.value.trim();
                 var cancionTitulo = modalTitulo.textContent;
 
-                // Buscar el div de canción con este título para obtener el ID y el botón
                 var cancionDiv = Array.from(document.querySelectorAll('.cancion-item')).find(el => {
-                    return el.querySelector('.font-bold').textContent === cancionTitulo;
+                    return el.querySelector('.font-bold')?.textContent === cancionTitulo;
                 });
                 if (!cancionDiv) return;
 
@@ -319,36 +326,31 @@
                     })
                 }).then(res => {
                     if (res.ok) {
-                        guardadoMsg.style.display = 'block';
+                        if (guardadoMsg) guardadoMsg.style.display = 'block';
+                        if (botonVer) botonVer.setAttribute('data-estructura', nuevaEstructura);
+                        if (modalEstructuraSpan) modalEstructuraSpan.textContent = nuevaEstructura;
 
-                        // Actualizar data-estructura en el botón
-                        if (botonVer) {
-                            botonVer.setAttribute('data-estructura', nuevaEstructura);
-                        }
-
-                        // También actualizar el modal si seguís viéndolo
-                        if (modalEstructuraSpan) {
-                            modalEstructuraSpan.textContent = nuevaEstructura;
-                        }
-
-                        setTimeout(() => guardadoMsg.style.display = 'none', 2000);
+                        setTimeout(() => {
+                            if (guardadoMsg) guardadoMsg.style.display = 'none';
+                        }, 2000);
                     } else {
                         alert('Error al guardar la estructura');
                     }
                 });
             }
             @endif
-            
         });
-    </script>
+        </script>
 
-    <script>
+        <script>
         @if(Auth::user()->tieneRolEnCulto($culto->id, 'musico'))
-            var modalTonalidadSpan = document.getElementById('modal-tonalidad');
-            var tonalidadInput = document.createElement('input');
-            tonalidadInput.type = 'text';
-            tonalidadInput.className = 'form-control mt-1';
-            tonalidadInput.placeholder = 'Proponer tonalidad';
+        var modalTonalidadSpan = document.getElementById('modal-tonalidad');
+        var tonalidadInput = document.createElement('input');
+        tonalidadInput.type = 'text';
+        tonalidadInput.className = 'form-control mt-1';
+        tonalidadInput.placeholder = 'Proponer tonalidad';
+
+        if (modalTonalidadSpan && modalTonalidadSpan.parentNode) {
             modalTonalidadSpan.parentNode.appendChild(tonalidadInput);
 
             tonalidadInput.addEventListener('blur', guardarTonalidad);
@@ -362,10 +364,12 @@
             function guardarTonalidad() {
                 var nuevaTonalidad = tonalidadInput.value.trim();
                 var modalTitulo = document.getElementById('modal-titulo');
+                if (!modalTitulo) return;
+
                 var cancionTitulo = modalTitulo.textContent;
 
                 var cancionDiv = Array.from(document.querySelectorAll('.cancion-item')).find(el => {
-                    return el.querySelector('.font-bold').textContent === cancionTitulo;
+                    return el.querySelector('.font-bold')?.textContent === cancionTitulo;
                 });
                 if (!cancionDiv) return;
 
@@ -385,66 +389,67 @@
                     })
                 }).then(res => {
                     if (res.ok) {
-                        // Actualizo texto en modal y el input
-                        modalTonalidadSpan.textContent = nuevaTonalidad;
-                        if (tonalidadInput) {
-                            tonalidadInput.value = nuevaTonalidad;
-                        }
+                        if (modalTonalidadSpan) modalTonalidadSpan.textContent = nuevaTonalidad;
+                        tonalidadInput.value = nuevaTonalidad;
 
-                        tonalidadGuardadoMsg.style.display = 'block';
-                        setTimeout(() => tonalidadGuardadoMsg.style.display = 'none', 2000);
+                        if (tonalidadGuardadoMsg) {
+                            tonalidadGuardadoMsg.style.display = 'block';
+                            setTimeout(() => tonalidadGuardadoMsg.style.display = 'none', 2000);
+                        }
                     } else {
                         alert('Error al guardar la tonalidad');
                     }
                 });
             }
 
-
-            estructuraModal.addEventListener('show.bs.modal', function (event) {
+            estructuraModal?.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
                 var tonalidad = button.getAttribute('data-tonalidad');
                 tonalidadInput.value = tonalidad || '';
             });
+        }
         @endif
+        </script>
 
-    </script>
-
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function () {
             @if($puedeOrdenar)
             const container = document.getElementById('canciones-lista');
 
-            Sortable.create(container, {
-                animation: 350,
-                onEnd: function () {
-                    const orden = Array.from(container.children).map(el => el.dataset.id);
-                    fetch("{{ route('cultos.canciones.reordenar', $culto) }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ orden })
-                    }).then(res => {
-                        if (!res.ok) {
-                            alert('Error al guardar el orden');
-                        } else {
-                            const alerta = document.getElementById('alerta-orden');
-                            alerta.style.pointerEvents = 'auto';   // activa interacción mientras está visible
-                            alerta.style.opacity = '1';            // aparece suave
-
-                            setTimeout(() => {
-                                alerta.style.opacity = '0';        // desaparece suave
-                                alerta.style.pointerEvents = 'none'; // ya no molesta cuando invisible
-                            }, 2500);
-                        }
-                    });
-
-                }
-            });
+            if (container) {
+                Sortable.create(container, {
+                    animation: 350,
+                    onEnd: function () {
+                        const orden = Array.from(container.children).map(el => el.dataset.id);
+                        fetch("{{ route('cultos.canciones.reordenar', $culto) }}", {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ orden })
+                        }).then(res => {
+                            if (!res.ok) {
+                                alert('Error al guardar el orden');
+                            } else {
+                                const alerta = document.getElementById('alerta-orden');
+                                if (alerta) {
+                                    alerta.style.pointerEvents = 'auto';
+                                    alerta.style.opacity = '1';
+                                    setTimeout(() => {
+                                        alerta.style.opacity = '0';
+                                        alerta.style.pointerEvents = 'none';
+                                    }, 2500);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
             @endif
         });
-    </script>
-    @endpush
+        </script>
+        @endpush
+
 
 </x-app-layout>
