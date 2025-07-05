@@ -24,7 +24,7 @@ COPY . .
 
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
-
+    
 # Instalar dependencias JS y compilar assets
 RUN npm install && npm run build
 
@@ -37,10 +37,10 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite \
     && sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Copiar el archivo de entorno
-COPY .env.example .env
-# Generar la clave de la aplicación
-RUN php artisan key:generate
+# Preparar el entorno Laravel
+RUN cp .env.example .env \
+    && composer install --no-dev --optimize-autoloader \
+    && php artisan key:generate
 # Ejecutar migraciones y sembrar la base de datos
 RUN php artisan migrate --force \
     && php artisan db:seed --force
