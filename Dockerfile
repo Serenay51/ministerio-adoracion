@@ -39,7 +39,6 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
 
 # Preparar el entorno Laravel
 RUN composer install --no-dev --optimize-autoloader \
-    && cp .env.example .env \
     && php artisan key:generate
 
 
