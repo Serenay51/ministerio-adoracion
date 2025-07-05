@@ -59,4 +59,8 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::get('/debug-env', function () {
+    return env('APP_DEBUG') ? 'Debug ON' : 'Debug OFF';
+});
+
 require __DIR__.'/auth.php';
