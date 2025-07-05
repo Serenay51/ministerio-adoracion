@@ -320,26 +320,37 @@
                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
                         "Content-Type": "application/json"
                     },
+                    credentials: "same-origin",  // 👈 necesario para cookies / sesión
                     body: JSON.stringify({
                         cancion_id: cancionId,
                         estructura: nuevaEstructura
                     })
                 }).then(res => {
                     if (res.ok) {
-                        if (guardadoMsg) guardadoMsg.style.display = 'block';
-                        if (botonVer) botonVer.setAttribute('data-estructura', nuevaEstructura);
-                        if (modalEstructuraSpan) modalEstructuraSpan.textContent = nuevaEstructura;
+                        guardadoMsg.style.display = 'block';
 
-                        setTimeout(() => {
-                            if (guardadoMsg) guardadoMsg.style.display = 'none';
-                        }, 2000);
+                        // Actualizar data-estructura en el botón
+                        if (botonVer) {
+                            botonVer.setAttribute('data-estructura', nuevaEstructura);
+                        }
+
+                        // También actualizar el modal si seguís viéndolo
+                        if (modalEstructuraSpan) {
+                            modalEstructuraSpan.textContent = nuevaEstructura;
+                        }
+
+                        setTimeout(() => guardadoMsg.style.display = 'none', 2000);
                     } else {
-                        alert('Error al guardar la estructura');
+                        res.json().then(data => {
+                            console.error(data);
+                            alert(data?.error || 'Error al guardar la estructura');
+                        });
                     }
+                }).catch(err => {
+                    console.error(err);
+                    alert('Error de conexión al guardar la estructura');
                 });
-            }
-            @endif
-        });
+
         </script>
 
         <script>
