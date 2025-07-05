@@ -19,11 +19,11 @@ COPY package*.json ./
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
-# Instalar dependencias JS y compilar assets
-RUN npm install && npm run build
-
 # Copiar el resto del código fuente
 COPY . .
+
+# Instalar dependencias JS y compilar assets
+RUN npm install && npm run build
 
 # Cambiar permisos a www-data
 RUN chown -R www-data:www-data /var/www/html \
@@ -39,7 +39,7 @@ RUN cp .env.example .env \
     && composer install --no-dev --optimize-autoloader \
     && php artisan key:generate
 
-# Exponer el puerto
+# Exponer el puerto 80
 EXPOSE 80
 
 # Iniciar Apache en primer plano
