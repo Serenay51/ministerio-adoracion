@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Instala Node y compila assets
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install \
+    && npm run build
+
 # Copiar el código de tu app
 COPY . /var/www/html
 
