@@ -11,15 +11,19 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copiar archivos composer para cache
 COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader
-
 # Copiar package.json y package-lock.json para cache npm
 COPY package*.json ./
 
-RUN npm install
-
-# Copiar el resto del código fuente (incluye .env.example)
+# Copiar TODO el código fuente (incluye artisan, .env.example, etc)
 COPY . .
+
+# Permitir que Composer corra como root sin warning
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Ejecutar composer install ya con artisan disponible
+RUN composer install --no-dev --optimize-autoloader
+
+RUN npm install
 
 # Copiar .env si no existe
 RUN if [ ! -f .env ]; then cp .env.example .env; fi
