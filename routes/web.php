@@ -9,7 +9,8 @@ use App\Http\Controllers\AsignacionController;
 use App\Http\Controllers\CultoCancionController;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    //return redirect()->route('login');
+    return 'Hola Mundo';
 });
 
 Route::middleware(['auth'])->group(function () {
