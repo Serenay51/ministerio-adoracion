@@ -1,52 +1,54 @@
+# Imagen base con PHP 8.3 y Apache
 FROM php:8.3-apache
 
+# Establecer directorio de trabajo
 WORKDIR /var/www/html
+
+# Preparar el entorno Laravel
+RUN cp .env.example .env \
+    && composer install --no-dev --optimize-autoloader \
+    && php artisan key:generate
 
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpq-dev curl gnupg nodejs npm \
+    git unzip libzip-dev libpq-dev curl gnupg \
     && docker-php-ext-install pdo_mysql pdo_pgsql zip
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copiar archivos composer para cache
-COPY composer.json composer.lock ./
-
-# Instalar dependencias PHP
-RUN composer install --no-dev --optimize-autoloader
-
-# Copiar archivos package.json para cache npm
+# Copiar package.json y package-lock.json primero para aprovechar cache y solo reinstalar si cambian
 COPY package*.json ./
 
-# Instalar dependencias npm
-RUN npm ci
+# Instalar Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
-# Copiar todo el código fuente
+# Copiar el resto del código fuente
 COPY . .
 
-# Asegurarse de que exista .env
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+    
+# Instalar dependencias JS y compilar assets
+RUN npm install && npm run build
 
-# Generar key de Laravel
-RUN php artisan key:generate
+# Cambiar permisos a www-data
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Compilar assets con Vite
-RUN npm run build
-
-# Permisos para storage y cache
-RUN chown -R www-data:www-data storage bootstrap/cache public \
-    && chmod -R 775 storage bootstrap/cache public
-
-# Configurar Apache
+# Configurar Apache para usar el directorio public/
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite \
     && sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Migraciones y seed
+
+# Ejecutar migraciones y sembrar la base de datos
 RUN php artisan migrate --force \
     && php artisan db:seed --force
 
+# Exponer el puerto 80
 EXPOSE 80
 
+# Iniciar Apache en primer plano
 CMD ["apache2-foreground"]
