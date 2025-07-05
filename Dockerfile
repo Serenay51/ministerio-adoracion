@@ -37,10 +37,13 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2enmod rewrite \
     && sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Preparar el entorno Laravel
-RUN composer install --no-dev --optimize-autoloader \
-
-
+# Copiar el archivo de entorno
+COPY .env.example .env
+# Generar la clave de la aplicación
+RUN php artisan key:generate
+# Ejecutar migraciones y sembrar la base de datos
+RUN php artisan migrate --force \
+    && php artisan db:seed --force
 
 # Exponer el puerto 80
 EXPOSE 80
