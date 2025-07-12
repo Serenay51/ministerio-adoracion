@@ -27,19 +27,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
         // Usuarios
-        Route::get('/admin/usuarios', [AdminController::class, 'usuarios'])->name('admin.usuarios');
+        Route::get('/admin/usuarios', [AdminController::class, 'usuarios'])->name('admin.usuarios.index');
         Route::post('/admin/usuarios', [AdminController::class, 'crearUsuario'])->name('admin.usuarios.crear');
         Route::put('/admin/usuarios/{user}', [AdminController::class, 'actualizarUsuario'])->name('admin.usuarios.actualizar');
         Route::delete('/admin/usuarios/{user}', [AdminController::class, 'eliminarUsuario'])->name('admin.usuarios.eliminar');
 
         // Canciones
-        Route::get('/admin/canciones', [AdminController::class, 'canciones'])->name('admin.canciones');
+        Route::get('/admin/canciones', [AdminController::class, 'canciones'])->name('admin.canciones.index');
         Route::post('/admin/canciones', [AdminController::class, 'crearCancion'])->name('admin.canciones.crear');
         Route::put('/admin/canciones/{cancion}', [AdminController::class, 'actualizarCancion'])->name('admin.canciones.actualizar');
         Route::delete('/admin/canciones/{cancion}', [AdminController::class, 'eliminarCancion'])->name('admin.canciones.eliminar');
 
         // Cultos
-        Route::get('/admin/cultos', [AdminController::class, 'cultos'])->name('admin.cultos');
+        Route::get('/admin/cultos', [AdminController::class, 'cultos'])->name('admin.cultos.index');
         Route::post('/admin/cultos', [AdminController::class, 'crearCulto'])->name('admin.cultos.crear');
         Route::put('/admin/cultos/{culto}', [AdminController::class, 'actualizarCulto'])->name('admin.cultos.actualizar');
         Route::delete('/admin/cultos/{culto}', [AdminController::class, 'eliminarCulto'])->name('admin.cultos.eliminar');

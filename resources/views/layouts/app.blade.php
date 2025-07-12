@@ -38,9 +38,9 @@
             <div class="bg-gray-200 py-2 shadow-sm">
                 <div class="max-w-7xl mx-auto px-4 flex gap-4">
                    <i class="fas fa-home"></i> <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:underline">Inicio</a>
-                   <i class="fas fa-users"></i> <a href="{{ route('admin.usuarios') }}" class="text-sm text-gray-600 hover:underline">Miembros</a>
-                   <i class="fas fa-music"></i> <a href="{{ route('admin.canciones') }}" class="text-sm text-gray-600 hover:underline">Canciones</a>
-                   <i class="fas fa-church"></i> <a href="{{ route('admin.cultos') }}" class="text-sm text-gray-600 hover:underline">Cultos</a>
+                   <i class="fas fa-users"></i> <a href="{{ route('admin.usuarios.index') }}" class="text-sm text-gray-600 hover:underline">Miembros</a>
+                   <i class="fas fa-music"></i> <a href="{{ route('admin.canciones.index') }}" class="text-sm text-gray-600 hover:underline">Canciones</a>
+                   <i class="fas fa-church"></i> <a href="{{ route('admin.cultos.index') }}" class="text-sm text-gray-600 hover:underline">Cultos</a>
                 </div>
             </div>
         @endif
@@ -62,6 +62,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fi-icons@1.0.0/css/fi.css">
+
+    <!-- Choices.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+    <!-- Choices.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     {{-- Scripts adicionales --}}
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>

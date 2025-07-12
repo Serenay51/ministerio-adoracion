@@ -16,6 +16,16 @@
             Agregar Miembro
         </button>
 
+        {{-- Barra de búsqueda --}}
+        <form method="GET" action="{{ route('admin.usuarios.index') }}" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Buscar por nombre o email">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+        </form>
+
         {{-- Mensajes --}}
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -57,6 +67,12 @@
                 @endforeach
             </tbody>
         </table>
+
+        
+        {{-- Paginación --}}
+        <div class="mt-3">
+            {{ $usuarios->withQueryString()->links() }}
+        </div>
 
         {{-- Modal Crear Miembro --}}
         <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">

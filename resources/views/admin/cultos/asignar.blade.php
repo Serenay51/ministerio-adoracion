@@ -14,6 +14,8 @@
                         <th>Músico</th>
                         <th>Instrumento</th>
                         <th>Coro de Apoyo</th>
+                        <th>Computadora</th>
+                        <th>Sonidista</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
@@ -51,6 +53,9 @@
                                     <option value="guitarra" {{ $instrumentoAsignado === 'guitarra' ? 'selected' : '' }}>Guitarra</option>
                                     <option value="teclado" {{ $instrumentoAsignado === 'teclado' ? 'selected' : '' }}>Teclado</option>
                                     <option value="bajo" {{ $instrumentoAsignado === 'bajo' ? 'selected' : '' }}>Bajo</option>
+                                    <option value="piano" {{ $instrumentoAsignado === 'piano' ? 'selected' : '' }}>Piano</option>
+                                    <option value="percusion" {{ $instrumentoAsignado === 'percusion' ? 'selected' : '' }}>Percusión</option>
+                                    <option value="violin" {{ $instrumentoAsignado === 'violin' ? 'selected' : '' }}>Violín</option>
                                 </select>
                             </td>
 
@@ -58,6 +63,18 @@
                             <td class="text-center">
                                 <input type="checkbox" name="asignaciones[{{ $index }}][roles][]" value="coro_apoyo"
                                     {{ in_array('coro_apoyo', $rolesAsignados) ? 'checked' : '' }}>
+                            </td>
+
+                            {{-- Computadora --}}
+                            <td class="text-center">
+                                <input type="checkbox" name="asignaciones[{{ $index }}][roles][]" value="computadora"
+                                    {{ in_array('computadora', $rolesAsignados) ? 'checked' : '' }}>
+                            </td>
+
+                            {{-- Sonidista --}}
+                            <td class="text-center">
+                                <input type="checkbox" name="asignaciones[{{ $index }}][roles][]" value="sonidista"
+                                    {{ in_array('sonidista', $rolesAsignados) ? 'checked' : '' }}>
                             </td>
 
                             {{-- Estado --}}

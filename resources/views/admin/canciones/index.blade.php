@@ -14,6 +14,16 @@
             <i class="bi bi-plus-lg"></i> Crear Canción
         </button>
 
+        {{-- Barra de Búsqueda --}}
+        <form method="GET" action="{{ route('admin.canciones.index') }}" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Buscar por título o autor">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+        </form>
+
         {{-- Tabla Canciones --}}
         <table class="table table-striped">
             <thead>
@@ -49,6 +59,12 @@
                 @endforeach
             </tbody>
         </table>
+
+        {{-- Paginación --}}
+        <div class="mt-3">
+            {{ $canciones->withQueryString()->links() }}
+        </div>
+        
 
         {{-- Modal Crear --}}
         <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">

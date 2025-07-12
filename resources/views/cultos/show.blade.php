@@ -53,6 +53,9 @@
                                 'guitarra' => 'fas fa-guitar',
                                 'teclado' => 'fas fa-keyboard',
                                 'bajo' => 'fas fa-record-vinyl',
+                                'piano' => 'fas fa-piano',
+                                'percusión' => 'fas fa-drumstick-bite',
+                                'violin' => 'fas fa-violin',
                                 default => 'fas fa-music',
                             };
                         @endphp
@@ -85,6 +88,32 @@
                 </ul>
             @else
                 <p class="text-gray-500">No asignados.</p>
+            @endif
+        </div>
+
+        {{-- Computadora --}}
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Computadora</h2>
+            @php
+                $computadora = $culto->rolCultos->where('rol', 'computadora')->first();
+            @endphp
+            @if($computadora)
+                <p class="text-gray-800"><i class="bi bi-laptop-fill me-1"></i> {{ $computadora->user->name }}</p>
+            @else
+                <p class="text-gray-500">No asignado.</p>
+            @endif
+        </div>
+
+        {{-- Sonidista --}}
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold">Sonidista</h2>
+            @php
+                $sonidista = $culto->rolCultos->where('rol', 'sonidista')->first();
+            @endphp
+            @if($sonidista)
+                <p class="text-gray-800"><i class="bi bi-speaker-fill me-1"></i> {{ $sonidista->user->name }}</p>
+            @else
+                <p class="text-gray-500">No asignado.</p>
             @endif
         </div>
 
@@ -179,38 +208,40 @@
         </div>
     </div>
 
-    {{-- Modal Asignar Canción --}}
-    <div class="modal fade" id="asignarCancionModal" tabindex="-1" aria-labelledby="asignarCancionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="{{ route('cultos.canciones.asignar', $culto) }}" class="modal-content">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="asignarCancionModalLabel">Asignar Canción al Culto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+   {{-- Modal Asignar Canción --}}
+<div class="modal fade" id="asignarCancionModal" tabindex="-1" aria-labelledby="asignarCancionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('cultos.canciones.asignar', $culto) }}" class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="asignarCancionModalLabel">Asignar Canción al Culto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label for="cancion_id" class="form-label">Canción</label>
+                    <select name="cancion_id" id="cancion_id" class="form-select" required>
+                        <option value="">-- Seleccioná una canción --</option>
+                        @foreach($cancionesDisponibles as $cancion)
+                            <option value="{{ $cancion->id }}">{{ $cancion->titulo }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="cancion_id" class="form-label">Canción</label>
-                        <select name="cancion_id" id="cancion_id" class="form-select" required>
-                            <option value="">-- Seleccioná una canción --</option>
-                            @foreach($cancionesDisponibles as $cancion)
-                                <option value="{{ $cancion->id }}">{{ $cancion->titulo }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div id="info-cancion" class="border p-2 mb-3" style="display:none;">
-                        <p><strong>Autor:</strong> <span id="autor-cancion"></span></p>
-                        <p><strong>Vista previa de la letra:</strong></p>
-                        <pre id="preview-letra" style="white-space: pre-wrap; max-height: 150px; overflow-y: auto;"></pre>
-                    </div>
+
+                <div id="info-cancion" class="border p-2 mb-3" style="display:none;">
+                    <p><strong>Autor:</strong> <span id="autor-cancion"></span></p>
+                    <p><strong>Vista previa de la letra:</strong></p>
+                    <pre id="preview-letra" style="white-space: pre-wrap; max-height: 150px; overflow-y: auto;"></pre>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Asignar</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success">Asignar</button>
+            </div>
+        </form>
     </div>
+</div>
     @php
         $cancionesJson = $cancionesDisponibles->map(function($c) {
             return [
@@ -448,6 +479,23 @@
                 });
             }
             @endif
+        });
+        </script>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectCancion = document.getElementById('cancion_id');
+            const choices = new Choices(selectCancion, {
+                searchEnabled: true,
+                shouldSort: false,
+                placeholderValue: 'Seleccioná una canción',
+                searchPlaceholderValue: 'Buscar canción...',
+                itemSelectText: '',
+                noResultsText: 'No hay resultados',
+                loadingText: 'Cargando...',
+            });
+
+            // Opcional: Podés agregar lógica para mostrar info de la canción seleccionada si querés
         });
         </script>
         @endpush

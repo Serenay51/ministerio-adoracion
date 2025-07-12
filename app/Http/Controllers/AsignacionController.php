@@ -15,7 +15,7 @@ class AsignacionController extends Controller
         $miembros = User::orderBy('name')->get();
 
         // Roles disponibles
-        $roles = ['director', 'musico', 'coro_apoyo'];
+        $roles = ['director', 'musico', 'coro_apoyo', 'computadora', 'sonidista'];
 
         // Cargar asignaciones actuales
         $asignaciones = $culto->rolCultos()->with('user')->get();
@@ -29,7 +29,7 @@ class AsignacionController extends Controller
             'asignaciones' => 'array',
             'asignaciones.*.user_id' => 'required|exists:users,id',
             'asignaciones.*.roles' => 'nullable|array',
-            'asignaciones.*.roles.*' => 'in:director,musico,coro_apoyo',
+            'asignaciones.*.roles.*' => 'in:director,musico,coro_apoyo,computadora,sonidista',
             'asignaciones.*.instrumento' => 'nullable|string|max:255',
         ]);
 

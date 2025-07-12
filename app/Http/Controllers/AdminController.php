@@ -18,10 +18,18 @@ class AdminController extends Controller
         return view('admin.index'); // O donde quieras que vaya la vista principal de admin
     }
     // Listar usuarios
-    public function usuarios()
+    public function usuarios(Request $request)
     {
-        // Traemos todos los usuarios que NO son presidente
-        $usuarios = User::where('is_president', false)->get();
+        $q = $request->input('q');
+
+        $usuarios = User::query()
+            ->where('is_president', false)
+            ->when($q, function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%");
+            })
+            ->orderBy('name')
+            ->paginate(10);
 
         return view('admin.usuarios.index', compact('usuarios'));
     }
@@ -75,9 +83,17 @@ class AdminController extends Controller
     }
 
         // Listar cultos
-    public function cultos()
+    public function cultos(Request $request)
     {
-        $cultos = Culto::orderBy('fecha', 'desc')->get();
+        $q = $request->input('q');
+
+        $cultos = Culto::query()
+            ->when($q, function ($query) use ($q) {
+                $query->where('descripcion', 'like', "%{$q}%");
+            })
+            ->orderBy('fecha', 'desc')
+            ->paginate(10);
+
         return view('admin.cultos.index', compact('cultos'));
     }
 
@@ -120,9 +136,18 @@ class AdminController extends Controller
     }
 
     // Mostrar listado de canciones
-    public function canciones()
+    public function canciones(Request $request)
     {
-        $canciones = Cancion::orderBy('titulo')->get();
+        $q = $request->input('q');
+
+        $canciones = Cancion::query()
+            ->when($q, function ($query) use ($q) {
+                $query->where('titulo', 'like', "%{$q}%")
+                    ->orWhere('autor', 'like', "%{$q}%");
+            })
+            ->orderBy('titulo')
+            ->paginate(10);
+
         return view('admin.canciones.index', compact('canciones'));
     }
 

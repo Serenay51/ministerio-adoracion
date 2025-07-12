@@ -14,6 +14,16 @@
             Agregar Culto
         </button>
 
+        {{-- Barra de búsqueda --}}
+        <form method="GET" action="{{ route('admin.cultos.index') }}" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Buscar por descripción">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+        </form>
+
         {{-- Mensajes --}}
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -55,6 +65,11 @@
                 @endforeach
             </tbody>
         </table>
+
+        {{-- Paginación --}}
+        <div class="mt-3">
+            {{ $cultos->withQueryString()->links() }}
+        </div>
 
         {{-- Modal Crear Culto --}}
         <div class="modal fade" id="createCultoModal" tabindex="-1" aria-labelledby="createCultoModalLabel" aria-hidden="true">
