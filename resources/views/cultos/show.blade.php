@@ -95,10 +95,15 @@
         <div class="mb-4">
             <h2 class="text-xl font-semibold">Computadora</h2>
             @php
-                $computadora = $culto->rolCultos->where('rol', 'computadora')->first();
+                $computadoras = $culto->rolCultos->where('rol', 'computadora');
             @endphp
-            @if($computadora)
-                <p class="text-gray-800"><i class="bi bi-laptop-fill me-1"></i> {{ $computadora->user->name }}</p>
+
+            @if($computadoras->isNotEmpty())
+                <ul class="list-unstyled ms-1 text-gray-800">
+                    @foreach($computadoras as $comp)
+                        <li><i class="bi bi-laptop-fill me-1"></i> {{ $comp->user->name }}</li>
+                    @endforeach
+                </ul>
             @else
                 <p class="text-gray-500">No asignado.</p>
             @endif
@@ -108,10 +113,15 @@
         <div class="mb-4">
             <h2 class="text-xl font-semibold">Sonidista</h2>
             @php
-                $sonidista = $culto->rolCultos->where('rol', 'sonidista')->first();
+                $sonidistas = $culto->rolCultos->where('rol', 'sonidista');
             @endphp
-            @if($sonidista)
-                <p class="text-gray-800"><i class="bi bi-speaker-fill me-1"></i> {{ $sonidista->user->name }}</p>
+
+            @if($sonidistas->isNotEmpty())
+                <ul class="list-unstyled ms-1 text-gray-800">
+                    @foreach($sonidistas as $son)
+                        <li><i class="bi bi-volume-up-fill me-1"></i> {{ $son->user->name }}</li>
+                    @endforeach
+                </ul>
             @else
                 <p class="text-gray-500">No asignado.</p>
             @endif

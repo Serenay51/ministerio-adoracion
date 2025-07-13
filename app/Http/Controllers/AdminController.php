@@ -50,7 +50,7 @@ class AdminController extends Controller
             'is_president' => false,
         ]);
 
-        return redirect()->route('admin.usuarios')->with('success', 'Usuario creado correctamente.');
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
 
     // Actualizar usuario
@@ -71,7 +71,7 @@ class AdminController extends Controller
 
         $user->save();
 
-        return redirect()->route('admin.usuarios')->with('success', 'Usuario actualizado correctamente.');
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
     // Eliminar usuario
@@ -79,7 +79,7 @@ class AdminController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.usuarios')->with('success', 'Usuario eliminado correctamente.');
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }
 
         // Listar cultos
@@ -111,7 +111,7 @@ class AdminController extends Controller
             'created_by' => Auth::id(),  // ¡ACA NO PUEDE FALTAR!
         ]);
 
-        return redirect()->route('admin.cultos')->with('success', 'Culto creado correctamente.');
+        return redirect()->route('admin.cultos.index')->with('success', 'Culto creado correctamente.');
     }
 
     // Actualizar culto
@@ -124,7 +124,7 @@ class AdminController extends Controller
 
         $culto->update($request->only('fecha', 'descripcion'));
 
-        return redirect()->route('admin.cultos')->with('success', 'Culto actualizado correctamente.');
+        return redirect()->route('admin.cultos.index')->with('success', 'Culto actualizado correctamente.');
     }
 
     // Eliminar culto
@@ -132,7 +132,7 @@ class AdminController extends Controller
     {
         $culto->delete();
 
-        return redirect()->route('admin.cultos')->with('success', 'Culto eliminado correctamente.');
+        return redirect()->route('admin.cultos.index')->with('success', 'Culto eliminado correctamente.');
     }
 
     // Mostrar listado de canciones
@@ -167,7 +167,7 @@ class AdminController extends Controller
             'created_by' => Auth::id(),  // <-- acá asignás el id del usuario logueado
         ]);
 
-        return redirect()->route('admin.canciones')->with('success', 'Canción creada correctamente.');
+        return redirect()->route('admin.canciones.index')->with('success', 'Canción creada correctamente.');
     }
 
     // Actualizar canción existente
@@ -181,7 +181,7 @@ class AdminController extends Controller
 
         $cancion->update($request->only('titulo', 'autor', 'letra'));
 
-        return redirect()->route('admin.canciones')->with('success', 'Canción actualizada correctamente.');
+        return redirect()->route('admin.canciones.index')->with('success', 'Canción actualizada correctamente.');
     }
 
     // Eliminar canción
@@ -189,6 +189,6 @@ class AdminController extends Controller
     {
         $cancion->delete();
 
-        return redirect()->route('admin.canciones')->with('success', 'Canción eliminada con éxito.');
+        return redirect()->route('admin.canciones.index')->with('success', 'Canción eliminada con éxito.');
     }
 }

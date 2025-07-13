@@ -24,6 +24,27 @@
             </div>
         </form>
 
+        {{-- Mensajes de éxito --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Mensajes de error --}}
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        {{-- Mensaje si no hay canciones --}}
+        @if($canciones->isEmpty())
+            <div class="alert alert-info" role="alert">
+                No hay canciones registradas.
+            </div>
+        @endif
         {{-- Tabla Canciones --}}
         <table class="table table-striped">
             <thead>

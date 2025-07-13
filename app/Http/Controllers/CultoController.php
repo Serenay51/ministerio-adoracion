@@ -28,7 +28,7 @@ class CultoController extends Controller
         $miembros = User::orderBy('name')->get();
 
         // Roles fijos
-        $roles = ['director' => 'Director', 'musico' => 'Músico', 'coro_apoyo' => 'Coro de Apoyo'];
+        $roles = ['director' => 'Director', 'musico' => 'Músico', 'coro_apoyo' => 'Coro de Apoyo', 'computadora' => 'Computadora', 'sonidista' => 'Sonidista'];
 
         // Asignaciones actuales
         $asignaciones = $culto->rolCultos()->get();
@@ -41,7 +41,7 @@ class CultoController extends Controller
         $data = $request->validate([
             'asignaciones' => 'required|array',
             'asignaciones.*' => 'array',
-            'asignaciones.*.*' => 'in:director,musico,coro_apoyo',
+            'asignaciones.*.*' => 'in:director,musico,coro_apoyo,computadora,sonidista',
         ]);
 
         // Eliminar asignaciones anteriores
