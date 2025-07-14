@@ -416,6 +416,7 @@
                 if (!cancionDiv) return;
 
                 var cancionId = cancionDiv.dataset.id;
+                var botonVer = cancionDiv.querySelector('button[data-bs-target="#estructuraModal"]');
 
                 var tonalidadGuardadoMsg = document.getElementById('tonalidad-guardado-msg');
 
@@ -433,6 +434,11 @@
                     if (res.ok) {
                         if (modalTonalidadSpan) modalTonalidadSpan.textContent = nuevaTonalidad;
                         tonalidadInput.value = nuevaTonalidad;
+
+                        // 🔥 ACTUALIZAR EL BOTÓN DE ESA CANCIÓN CON LA NUEVA TONALIDAD
+                        if (botonVer) {
+                            botonVer.setAttribute('data-tonalidad', nuevaTonalidad);
+                        }
 
                         if (tonalidadGuardadoMsg) {
                             tonalidadGuardadoMsg.style.display = 'block';
