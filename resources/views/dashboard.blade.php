@@ -52,7 +52,7 @@
                     <div class="text-sm font-bold">{{ $date->day }}</div>
 
                     @if($cultoDelDia)
-                        <div class="text-xs text-green-600 font-semibold truncate">
+                        <div class="text-sm text-green-600 font-semibold truncate">
                             {{ Str::limit($cultoDelDia->descripcion, 20) }}
                         </div>
                         <div class="text-xs truncate">
