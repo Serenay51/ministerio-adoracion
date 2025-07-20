@@ -23,6 +23,8 @@
             <div>
                 @auth
                     <span class="me-3">{{ Auth::user()->name }}</span>
+                    <i class="fas fa-user"></i>
+                    <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-secondary ms-2">Perfil</a>
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-sm btn-outline-secondary">Cerrar sesión</button>
